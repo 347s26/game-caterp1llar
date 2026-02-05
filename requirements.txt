@@ -1,0 +1,3 @@
+# declaritively specify the python dependencies of this project
+Django~=5.2
+django-environ~=0.12.0
