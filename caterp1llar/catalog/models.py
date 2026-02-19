@@ -2,7 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.core.validators import MinValueValidator, MaxValueValidator
 
-
+#TODO: NO USER CLASS. IMPORT instead
 class User(models.Model):
     name = models.CharField(
         max_length=20,
@@ -10,11 +10,15 @@ class User(models.Model):
         help_text="Enter a player name.",
     )
 
+
     games_won = models.IntegerField(
         
     )                                        
 
     color = ColorField(default='#FF0000') #TODO: this needs a package install
+
+    def is_turn(self):
+        self.objects.get(Game).get_whosTurn()
 
     def get_absolute_url(self):
         """Returns the URL to access a particular instance of MyModelName."""
@@ -46,11 +50,17 @@ class Loc(models.Model):
 class Game(models.Model):
     # Fields
 
+    #foreign key
     player1 = models.OneToOneField(User, on_delete=models.CASCADE)
     player2 = models.OneToOneField(User, on_delete=models.CASCADE)
 
     head = models.OneToOneField(Loc, on_delete=models.CASCADE)
     tail = models.OneToOneField(Loc, on_delete=models.CASCADE)
+
+    whosTurn = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def get_whosTurn(self):
+        return self.whosTurn
 
     def get_absolute_url(self):
         """Returns the URL to access a particular instance of MyModelName."""
